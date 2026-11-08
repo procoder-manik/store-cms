@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "Lumen Product Importer",
+  "version": "2.0.0",
+  "description": "Import products from any online store (Temu, AliExpress, Alibaba, Shopify and WooCommerce stores, Amazon, Daraz and more) into your store with images, video, sizes and colors.",
+  "permissions": [
+    "storage",
+    "activeTab",
+    "scripting"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Import to my store"
+  },
+  "options_page": "options.html"
+}

@@ -1,0 +1,24 @@
+# Nightly database backup (free). Stores a compressed dump as a private workflow artifact for 30 days.
+# Add repository secret SUPABASE_DB_URL (Supabase > Project Settings > Database > Connection string > URI, session pooler).
+name: Database backup
+on:
+  schedule:
+    - cron: "0 21 * * *" # 03:00 Dhaka time
+  workflow_dispatch:
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install PostgreSQL client
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq postgresql-client
+      - name: Dump database
+        env:
+          DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+        run: |
+          pg_dump "$DB_URL" --no-owner --no-privileges --schema=public --schema=auth --schema=storage -Fc -f backup.dump
+          ls -lh backup.dump
+      - uses: actions/upload-artifact@v4
+        with:
+          name: db-backup-${{ github.run_id }}
+          path: backup.dump
+          retention-days: 30
